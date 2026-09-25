@@ -1,9 +1,10 @@
 // A Tower function is a SERVER, not a handler.
 //
-// Tower builds this repository into an image and runs `npm start`. Two things must be
-// true of whatever that starts, and both are easy to get wrong:
+// Tower builds this repository into an image and runs the command in package.json's
+// "start" script — here, `node index.js`. Two things must be true of whatever that
+// starts, and both are easy to get wrong:
 //
-//   1. It listens on the port in process.env.PORT — not a port you choose.
+//   1. It listens on the port in process.env.PORT — the port configured on the function.
 //   2. It keeps running. A module that exports a handler and returns builds perfectly
 //      well and then never serves anything.
 //
@@ -13,7 +14,10 @@
 
 const http = require('node:http');
 
-// Tower sets PORT. The fallback is only so `npm start` works on your laptop.
+// You choose the port on the function (8080 by default); Tower puts that value in PORT.
+// Read it rather than hardcoding, so your code and your configuration cannot disagree —
+// and so changing the port later needs no code change. The fallback is only for running
+// this on your laptop.
 const port = process.env.PORT || 8080;
 
 const server = http.createServer((req, res) => {
