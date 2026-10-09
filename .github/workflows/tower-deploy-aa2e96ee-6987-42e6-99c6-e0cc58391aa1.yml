@@ -16,8 +16,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Build on Tower and release if enabled
-        uses: Tower-Cloud/function-deploy-action@v1
+      - id: tower
+        name: Build on Tower and release if enabled
+        uses: Tower-Cloud/function-deploy-action@39f0a2374e67c5d8e8af275ef09d8c5fe18be15a
         with:
           api-url: ${{ secrets.TOWER_API_URL }}
           function-id: aa2e96ee-6987-42e6-99c6-e0cc58391aa1
@@ -27,9 +28,16 @@ jobs:
           idempotency-key: aa2e96ee-6987-42e6-99c6-e0cc58391aa1-${{ github.sha }}-${{ github.run_attempt }}
       - name: Release the Tower build slot on cancellation
         if: cancelled()
-        uses: Tower-Cloud/function-deploy-action@v1
+        uses: Tower-Cloud/function-deploy-action@39f0a2374e67c5d8e8af275ef09d8c5fe18be15a
         with:
           api-url: ${{ secrets.TOWER_API_URL }}
           function-id: aa2e96ee-6987-42e6-99c6-e0cc58391aa1
           token: ${{ secrets.TOWER_FN_DEPLOY_TOKEN_AA2E96EE_6987_42E6_99C6_E0CC58391AA1 }}
           cancel: "true"
+      - name: Report observed outcomes
+        if: always()
+        run: |
+          echo "build-status=${{ steps.tower.outputs.status }}"
+          echo "build-succeeded=${{ steps.tower.outputs.build-succeeded }}"
+          echo "deployment-status=${{ steps.tower.outputs.deployment-status }}"
+          echo "deployment-succeeded=${{ steps.tower.outputs.deployment-succeeded }}"
