@@ -1,9 +1,1 @@
-{
-  "name": "tower-function-example-nodejs",
-  "version": "1.0.0",
-  "private": true,
-  "description": "A Tower function that builds and serves as-is. Fork it, or copy the two files.",
-  "scripts": {
-    "start": "node index.js"
-  }
-}
+{"name":"ux1009-malformed-package",
