@@ -1,1 +1,1 @@
-UX audit 2026-10-09: rotated credential + release-on-push.
+UX audit 2026-10-09: re-enabled build-only automation.
